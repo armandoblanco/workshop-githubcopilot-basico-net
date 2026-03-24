@@ -115,7 +115,7 @@ Este workshop práctico de **2 horas** te guiará en el desarrollo de un **Siste
 │  └──────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────┘
 
-(*) Transacciones es un desafío opcional (Paso 1.7)
+(*) Transacciones es un desafío opcional (Paso 1.9)
 ```
 
 **Flujo de la aplicación:**
@@ -159,17 +159,6 @@ Desarrolla mi app bancaria
 > Observa cómo el segundo comentario le da a Copilot **contexto** (Contoso Banco), **intención** (obtener saldo), **detalles** (parámetros y retorno) y **tecnología** (Minimal APIs con OpenAPI). Cuanto más específico seas con la intención, mejores serán las sugerencias.
 
 > 📚 **¿Quieres más ejemplos de buenas prácticas?** Consulta el repositorio [github/awesome-copilot](https://github.com/github/awesome-copilot) — contiene instrucciones, agentes y configuraciones contribuidas por la comunidad para sacar el máximo provecho de GitHub Copilot.
-
-### ¿Qué es @workspace?
-
-El `@workspace` es un participante de chat que proporciona contexto sobre todo tu espacio de trabajo (proyecto) a GitHub Copilot.
-
-| Uso | Ejemplo |
-|-----|---------|
-| Buscar código | `@workspace ¿dónde se define la clase Cliente?` |
-| Entender el proyecto | `@workspace ¿qué hace este proyecto?` |
-| Encontrar patrones | `@workspace ¿cómo se implementan los endpoints?` |
-| Generar código contextual | `@workspace crea un nuevo endpoint similar a los existentes` |
 
 ### Modos de GitHub Copilot Chat
 
@@ -242,6 +231,21 @@ con modelo, servicio y endpoints"
 | Ideal para | Aprender | Implementar | Tareas complejas |
 | Riesgo | Ninguno | Medio | Bajo |
 
+### Personalización de Copilot: Instrucciones, Prompt Files, Agentes y Skills
+
+GitHub Copilot se puede personalizar a varios niveles usando archivos de configuración dentro de tu repositorio. Estos son los componentes principales del sistema de personalización:
+
+| Componente | Ubicación | Propósito | Cuándo usarlo |
+|------------|-----------|-----------|---------------|
+| **Instrucciones** | `.github/copilot-instructions.md` | Reglas globales que Copilot aplica **siempre** en todo el proyecto (idioma, convenciones, stack) | Desde el inicio del proyecto — se define una vez |
+| **Prompt Files** | `.github/prompts/*.prompt.md` | Prompts reutilizables para tareas repetitivas, invocados manualmente con `/nombre` | Cuando repites el mismo tipo de petición frecuentemente |
+| **Agentes personalizados** | `.github/agents/*.md` | Versiones especializadas de Copilot con un rol, herramientas y comportamiento definido | Cuando necesitas un "especialista" (frontend, testing, docs, seguridad) |
+| **Skills** | `.github/skills/*/SKILL.md` | Paquetes de instrucciones con scripts y recursos incluidos para tareas multi-paso | Cuando la tarea requiere archivos auxiliares o scripts bundled |
+
+Piensa en las **instrucciones** como las reglas del equipo que todos siguen, los **prompt files** como plantillas reutilizables para tareas comunes, los **agentes** como compañeros especialistas que puedes invocar según la tarea, y los **skills** como mini-runbooks que incluyen todo lo necesario para ejecutar una tarea compleja.
+
+> 📚 En este workshop usaremos **instrucciones** (Paso 1.3) y crearemos un **agente personalizado** (Paso 2.2). Para explorar más componentes, consulta el repositorio [github/awesome-copilot](https://github.com/github/awesome-copilot).
+
 ### Comandos Especiales (/comando)
 
 | Comando | Descripción | Ejemplo de uso |
@@ -286,7 +290,7 @@ git --version       # Git
 | 0:00 - 0:15 | Bienvenida | Setup, configuración e introducción | - |
 | 0:15 - 0:55 | Ejercicio 1 | API REST con Minimal APIs + Swagger | Ask → Agent |
 | 0:55 - 1:00 | ☕ Break | Descanso y Q&A rápido | - |
-| 1:00 - 1:30 | Ejercicio 2 | Frontend HTML + integración con API | Agent |
+| 1:00 - 1:30 | Ejercicio 2 | Frontend HTML + agente web + integración con API | Agent |
 | 1:30 - 1:50 | Ejercicio 3 | Pruebas unitarias y refactoring | Agent + /tests |
 | 1:50 - 2:00 | Cierre | Recap, tips avanzados y recursos | - |
 
@@ -301,6 +305,7 @@ git --version       # Git
 ### Objetivos
 
 - ✅ Configurar instrucciones de Copilot para el proyecto
+- ✅ Documentar la especificación del sistema como base para desarrollo agéntico
 - ✅ Crear la estructura del proyecto .NET 8
 - ✅ Implementar una API REST con Minimal APIs
 - ✅ Obtener documentación Swagger automática con Swashbuckle
@@ -340,15 +345,44 @@ Ayúdame a entender:
 
 ---
 
-### Paso 1.2: Crear instrucciones de Copilot para el proyecto
+### Paso 1.2: Documentar la especificación del sistema 📄
 
-> 💡 **¿Por qué ahora?** El archivo `copilot-instructions.md` configura a Copilot para que siga los estándares del proyecto en **todos** los archivos que genere de aquí en adelante. Crearlo antes de escribir código asegura que los modelos, la API y el frontend se generen con las convenciones correctas desde el inicio.
+> 💡 **¿Por qué este paso?** Antes de escribir código, es buena práctica capturar la especificación de lo que vas a construir en un documento dentro del repositorio. Este documento cumple dos funciones: sirve como referencia para ti y tu equipo, y es la **base para que los agentes, skills y prompt files de Copilot tengan contexto detallado** sobre qué deben construir. En desarrollo agéntico, la calidad de la especificación determina la calidad del resultado.
 
 > 💡 **IMPORTANTE:** Cambia a **Modo Agent** (ícono de robot 🤖). Este modo **PUEDE** crear y modificar archivos.
 
 📍 **Cómo activar Modo Agent:**
 1. En Copilot Chat, busca el selector de modo
 2. Selecciona **"Agent"** o el ícono de robot/chispa
+
+🤖 **PROMPT en Modo Agent:**
+
+```
+Basándote en la conversación anterior sobre el diseño del sistema bancario, crea el archivo docs/spec.md con la especificación técnica del proyecto Contoso Banco.
+
+El documento debe incluir:
+
+1. Resumen ejecutivo del sistema
+2. Entidades del dominio con sus campos y tipos de datos
+3. Lista de endpoints REST (método HTTP, ruta, descripción, códigos de respuesta)
+4. Reglas de negocio (validaciones de saldo, tipos de cuenta, estados)
+5. Stack tecnológico (.NET 8, Minimal APIs, Swashbuckle, xUnit)
+6. Estructura de carpetas esperada del proyecto
+7. Datos de ejemplo para cada entidad (3 clientes, 3 cuentas)
+
+Formato: Markdown estructurado con tablas donde aplique.
+Idioma: Español.
+```
+
+📝 **¿Por qué es importante?** Este archivo `docs/spec.md` se convierte en el **contrato** del proyecto. Cuando más adelante uses Copilot en modo Agent para generar código, modelos o tests, puedes referenciarlo en tus prompts: *"Implementa los endpoints de clientes según la especificación en docs/spec.md"*. Esto es mucho más preciso que repetir los requisitos cada vez.
+
+> 🌟 **Momento wow:** Copilot toma la conversación del Paso 1.1 como contexto y genera un documento de especificación completo y coherente. Este patrón de **explorar → documentar → implementar** es la base del desarrollo agéntico: defines qué quieres con precisión, y luego dejas que Copilot ejecute contra esa definición.
+
+---
+
+### Paso 1.3: Crear instrucciones de Copilot para el proyecto
+
+> 💡 **¿Por qué ahora?** El archivo `copilot-instructions.md` configura a Copilot para que siga los estándares del proyecto en **todos** los archivos que genere de aquí en adelante. Crearlo antes de escribir código asegura que los modelos, la API y el frontend se generen con las convenciones correctas desde el inicio. A diferencia de la especificación (`docs/spec.md`) que describe **qué** construir, las instrucciones definen **cómo** debe comportarse Copilot.
 
 🤖 **PROMPT en Modo Agent:**
 
@@ -379,12 +413,12 @@ Crea el archivo .github/copilot-instructions.md con instrucciones para que Copil
 - Interfaces: IPrefijo + PascalCase (IClienteServicio)
 
 ## Contexto del Proyecto
-Este es un sistema bancario para Contoso Banco que gestiona clientes, cuentas y transacciones. Usa datos en memoria (colecciones C#) sin base de datos externa. Usa Minimal APIs (no Controllers). Usa records para DTOs cuando sea apropiado.
+Este es un sistema bancario para Contoso Banco que gestiona clientes, cuentas y transacciones. Usa datos en memoria (colecciones C#) sin base de datos externa. Usa Minimal APIs (no Controllers). Usa records para DTOs cuando sea apropiado. La especificación completa está en docs/spec.md.
 ```
 
 ---
 
-### Paso 1.3: Crear estructura del proyecto
+### Paso 1.4: Crear estructura del proyecto
 
 🤖 **PROMPT en Modo Agent:**
 
@@ -422,18 +456,18 @@ mkdir ContosoBanco/Models ContosoBanco/Services
 dotnet add ContosoBanco package Swashbuckle.AspNetCore
 ```
 
-> 📝 **Nota:** A diferencia de Python donde necesitas `__init__.py`, en .NET las carpetas son simplemente organización. Los namespaces se definen en cada archivo `.cs` y el compilador los resuelve automáticamente.
+> 📝 **Nota:** En .NET las carpetas son simplemente organización. Los namespaces se definen en cada archivo `.cs` y el compilador los resuelve automáticamente — no requieren archivos especiales para funcionar como paquetes importables.
 
 ---
 
-### Paso 1.4: Crear los modelos de datos con Copilot
+### Paso 1.5: Crear los modelos de datos con Copilot
 
 Ahora vamos a ver cómo Copilot nos ayuda a escribir código a partir de **comentarios descriptivos**. En lugar de pedirle el código exacto, le daremos contexto e intención.
 
 🤖 **PROMPT en Modo Agent:**
 
 ```
-Crea el archivo ContosoBanco/Models/Cliente.cs con el modelo de datos para los clientes de Contoso Banco.
+Crea el archivo ContosoBanco/Models/Cliente.cs con el modelo de datos para los clientes de Contoso Banco según la especificación en docs/spec.md.
 
 El modelo debe incluir:
 - Una clase Cliente con propiedades: Id (int), Nombre (string), Email (string), Telefono (string), Direccion (string)
@@ -451,11 +485,11 @@ El modelo debe incluir:
 - ¿Usó records para los DTOs?
 - ¿Necesitas ajustar alguna propiedad?
 
-> 💡 **Tip:** Si Copilot genera el código en inglés, prueba agregar al prompt: *"Recuerda seguir las instrucciones de .github/copilot-instructions.md"*. Esto refuerza las convenciones que configuraste en el Paso 1.2.
+> 💡 **Tip:** Si Copilot genera el código en inglés, prueba agregar al prompt: *"Recuerda seguir las instrucciones de .github/copilot-instructions.md"*. Esto refuerza las convenciones que configuraste en el Paso 1.3.
 
 ---
 
-### Paso 1.5: Crear el modelo de cuentas bancarias
+### Paso 1.6: Crear el modelo de cuentas bancarias
 
 Ahora usaremos Copilot para generar el modelo de cuentas, siguiendo el mismo patrón que usamos con clientes.
 
@@ -487,7 +521,7 @@ Sigue el mismo patrón y estilo que Cliente.cs y ClienteServicio.cs
 
 ---
 
-### Paso 1.6: Crear la aplicación con Minimal APIs y Swagger
+### Paso 1.7: Crear la aplicación con Minimal APIs y Swagger
 
 Ahora le pediremos a Copilot que genere la aplicación principal. Observa cómo con un prompt conciso y orientado a la intención, Copilot puede generar una app completa.
 
@@ -518,7 +552,7 @@ Configura:
 
 ---
 
-### Paso 1.7: Ejecutar y explorar Swagger
+### Paso 1.8: Ejecutar y explorar Swagger
 
 🤖 **PROMPT en Modo Agent:**
 
@@ -546,7 +580,7 @@ dotnet run
 
 ---
 
-### Paso 1.8: Agregar endpoint de transacciones (⭐ desafío bonus)
+### Paso 1.9: Agregar endpoint de transacciones (⭐ desafío bonus)
 
 > 📝 **Este paso es OPCIONAL.** Es un desafío para quienes terminaron los pasos anteriores antes de tiempo. Si el grupo va justo de tiempo, el instructor puede indicar que lo salten y pasen directamente al Ejercicio 2.
 
@@ -555,7 +589,7 @@ Este paso es un **mini-desafío**. Usa lo que aprendiste para crear la funcional
 🤖 **PROMPT sugerido (adáptalo a tu estilo):**
 
 ```
-@workspace Basándote en los patrones existentes del proyecto, crea la funcionalidad de transacciones bancarias:
+Basándote en los patrones existentes del proyecto y la especificación en docs/spec.md, crea la funcionalidad de transacciones bancarias:
 
 1. Modelo en Models/Transaccion.cs con:
    - Propiedades: Id, CuentaOrigenId, CuentaDestinoId (nullable), Tipo (string: "deposito"/"retiro"/"transferencia"), Monto (decimal), Fecha (DateTime), Descripcion (string)
@@ -569,7 +603,7 @@ Este paso es un **mini-desafío**. Usa lo que aprendiste para crear la funcional
 4. Incluye documentación OpenAPI con .WithOpenApi() en cada endpoint
 ```
 
-> 💡 **Observa:** Al usar `@workspace`, Copilot analiza los archivos existentes y genera código que **sigue los mismos patrones** que ya usaste en clientes y cuentas.
+> 💡 **Observa:** Copilot analiza los archivos existentes y genera código que **sigue los mismos patrones** que ya usaste en clientes y cuentas.
 
 ---
 
@@ -595,13 +629,14 @@ Este paso es un **mini-desafío**. Usa lo que aprendiste para crear la funcional
 ### Objetivos
 
 - ✅ Crear una página HTML servida como archivo estático que consuma la API
-- ✅ Usar Copilot para generar código JavaScript vanilla con `fetch()`
+- ✅ Crear un agente personalizado de Copilot para desarrollo web
+- ✅ Usar el agente con una imagen de referencia para mejorar el frontend
 - ✅ Integrar Bootstrap 5 vía CDN para una interfaz visual atractiva
 - ✅ Practicar el uso de `/explain` para entender código generado
 
 ### Paso 2.1: Crear la página HTML del frontend
 
-> 💡 **NOTA:** Todo el frontend vive en un solo archivo `wwwroot/index.html`. .NET lo sirve como archivo estático con `UseStaticFiles()` (ya configurado en Program.cs desde el Paso 1.6). El JavaScript vanilla dentro del HTML usa `fetch()` para comunicarse con la API.
+> 💡 **NOTA:** Todo el frontend vive en un solo archivo `wwwroot/index.html`. .NET lo sirve como archivo estático con `UseStaticFiles()` (ya configurado en Program.cs desde el Paso 1.7). El JavaScript vanilla dentro del HTML usa `fetch()` para comunicarse con la API.
 
 🤖 **PROMPT en Modo Agent:**
 
@@ -629,16 +664,72 @@ El JavaScript debe usar fetch() para consumir la API en /api/ (misma URL base).
 Incluye manejo de errores con mensajes amigables al usuario.
 ```
 
-> 📝 **Nota:** Observa que la barra de navegación solo incluye **Inicio, Clientes y Cuentas**. Si completaste el desafío bonus de transacciones (Paso 1.8), puedes agregar un tab de Transacciones más adelante.
+> 📝 **Nota:** Observa que la barra de navegación solo incluye **Inicio, Clientes y Cuentas**. Si completaste el desafío bonus de transacciones (Paso 1.9), puedes agregar un tab de Transacciones más adelante.
 
 ---
 
-### Paso 2.2: Agregar la sección de Cuentas al HTML
+### Paso 2.2: Crear un agente personalizado para desarrollo web 🤖
+
+> 💡 **¿Qué es un agente personalizado?** Como vimos en los Conceptos Clave, un agente es una versión especializada de Copilot definida en un archivo Markdown con frontmatter YAML. Le das un nombre, una descripción, y un prompt que define su rol, expertise y reglas. Una vez creado, puedes seleccionarlo en Copilot Chat para que todas sus respuestas sigan ese perfil especializado.
 
 🤖 **PROMPT en Modo Agent:**
 
 ```
-@workspace Actualiza wwwroot/index.html para agregar la sección de Cuentas bancarias.
+Crea el archivo .github/agents/frontend-web.md con un agente personalizado de Copilot especializado en desarrollo web frontend para Contoso Banco.
+
+El archivo necesita un frontmatter YAML con name "frontend-web" y una descripción corta, seguido de las instrucciones en Markdown. En las instrucciones, describe al agente así:
+
+Es un especialista senior en frontend web con experiencia en interfaces para banca y finanzas. Domina HTML5 semántico, Bootstrap 5 vía CDN, JavaScript vanilla moderno con fetch y async/await, y diseño responsive mobile-first.
+
+Todo lo que genere debe estar en español: código, comentarios y textos visibles en la interfaz. El look and feel debe ser profesional y bancario — azul oscuro, blanco y gris claro como paleta base. La usabilidad y la claridad siempre van por encima de la complejidad visual. Los montos deben mostrarse como moneda con separadores de miles, y la interfaz debe incluir estados de carga y mensajes de error que un usuario no técnico pueda entender.
+
+Todo el frontend vive en un solo archivo wwwroot/index.html con el JavaScript embebido al final en una etiqueta script, consumiendo la API REST en /api/ con fetch.
+
+Cuando reciba una imagen de referencia, debe analizar el layout, los colores, la tipografía y la distribución de elementos para extraer los mejores patrones y adaptarlos al stack del proyecto, sin copiar el diseño tal cual y manteniendo la identidad visual de Contoso Banco.
+```
+
+📝 **Observa:** El agente queda registrado en el repositorio. Cualquier miembro del equipo que clone el repo tendrá acceso a este agente especializado desde Copilot Chat.
+
+---
+
+### Paso 2.3: Mejorar el frontend usando el agente con un screenshot 📸
+
+> 💡 **CONCEPTO:** Ahora vamos a usar el agente que acabamos de crear para mejorar la página del Paso 2.1. El flujo es: tomas un screenshot de una interfaz que te guste como referencia, se lo pasas al agente, y le pides que adapte tu frontend con esa inspiración.
+
+📍 **Instrucciones:**
+1. Busca un screenshot de un dashboard bancario que te guste como referencia (puedes buscar "banking dashboard UI" en Google Imágenes y tomar un screenshot, o usar uno que el instructor proporcione)
+2. En Copilot Chat, selecciona el agente **frontend-web** que creaste en el paso anterior (en el selector de agentes/modos)
+3. Arrastra o pega la imagen de referencia en el chat y escribe el siguiente prompt:
+
+🤖 **PROMPT usando el agente frontend-web:**
+
+```
+Aquí te comparto una imagen de referencia de un dashboard bancario.
+
+Analiza el diseño y mejora el archivo wwwroot/index.html de Contoso Banco aplicando las mejores ideas de esta referencia:
+
+1. Mejora el layout de las tarjetas de estadísticas en la sección de Inicio
+2. Mejora el diseño de la tabla de clientes (bordes, spacing, hover effects)
+3. Agrega íconos visuales (puedes usar Bootstrap Icons vía CDN)
+4. Mejora la navegación y la jerarquía visual general
+5. Asegúrate de que el diseño sea responsive
+
+Mantén toda la funcionalidad JavaScript existente (fetch, modales, CRUD).
+No cambies las rutas de la API ni la lógica de negocio.
+```
+
+> 🌟 **Momento wow:** El agente interpreta la imagen de referencia y adapta el frontend manteniendo la funcionalidad existente. Esto demuestra cómo los agentes personalizados combinan expertise especializada con contexto visual para producir resultados más precisos que un prompt genérico.
+
+> 📝 **Si no tienes una imagen de referencia**, puedes omitir la imagen y pedirle al agente: *"Mejora el diseño de wwwroot/index.html con tu criterio de experto en UX bancaria. Hazlo más profesional y moderno manteniendo toda la funcionalidad existente."*
+
+---
+
+### Paso 2.4: Agregar la sección de Cuentas al HTML
+
+🤖 **PROMPT en Modo Agent:**
+
+```
+Actualiza wwwroot/index.html para agregar la sección de Cuentas bancarias.
 
 Agrega dentro del mismo archivo HTML:
 1. Tabla con las cuentas (número, tipo, saldo, estado, cliente asociado)
@@ -653,34 +744,11 @@ Agrega dentro del mismo archivo HTML:
 Usa el mismo patrón de JavaScript vanilla con fetch() que ya existe en la sección de Clientes.
 ```
 
-> 💡 **Observa:** Al usar `@workspace` y mencionar "el patrón que ya existe", Copilot genera código **consistente** con lo que ya escribiste, todo dentro del mismo archivo HTML.
+> 💡 **Observa:** Al mencionar "el patrón que ya existe", Copilot genera código **consistente** con lo que ya escribiste, todo dentro del mismo archivo HTML.
 
 ---
 
-### Paso 2.3: Verificar que el frontend se sirve correctamente
-
-> 📝 **Este paso puede ser innecesario** si en el Paso 1.6 Copilot ya configuró `UseStaticFiles()` y la redirección de `"/"` a `"/index.html"` en `Program.cs`. Verifica rápidamente:
-
-🤖 **PROMPT en Modo Ask:**
-
-```
-@workspace ¿El archivo Program.cs ya tiene configurado UseStaticFiles() y una redirección de "/" a "/index.html"?
-```
-
-Si la respuesta es **sí**, pasa directo al Paso 2.4. Si la respuesta es **no**:
-
-🤖 **PROMPT en Modo Agent:**
-
-```
-@workspace Actualiza Program.cs para:
-1. Agregar app.UseStaticFiles() para servir archivos desde wwwroot/
-2. Agregar un app.MapGet("/", () => Results.Redirect("/index.html")) para redirigir la raíz al frontend
-No modifiques los endpoints de la API existentes.
-```
-
----
-
-### Paso 2.4: Ejecutar y probar la integración
+### Paso 2.5: Ejecutar y probar la integración
 
 🤖 **PROMPT en Modo Agent:**
 
@@ -708,7 +776,7 @@ dotnet run
 
 ---
 
-### Paso 2.5: Usar /explain para entender código (demostración)
+### Paso 2.6: Usar /explain para entender código (demostración)
 
 > 💡 **CONCEPTO:** El comando `/explain` es perfecto para entender código que Copilot generó.
 
@@ -730,6 +798,7 @@ dotnet run
 |----------|----------|
 | Página en blanco en `/` | Verifica que `Program.cs` tenga `app.UseStaticFiles()` y que `index.html` esté en `wwwroot/` |
 | 404 en `/index.html` | Asegúrate de que la carpeta se llame exactamente `wwwroot` (no `Wwwroot` ni `wwwRoot`) |
+| El agente frontend-web no aparece | Verifica que el archivo `.github/agents/frontend-web.md` exista y tenga el frontmatter YAML correcto |
 | Fetch falla con "Network Error" | Confirma que la API esté corriendo en el puerto correcto |
 | Bootstrap no carga | Verifica tu conexión a internet (se usa CDN) |
 | Modal no se abre | Verifica que el JS de Bootstrap CDN esté incluido en el HTML |
@@ -801,7 +870,7 @@ Asegúrate de que:
 3. El namespace sea ContosoBanco.Tests
 ```
 
-> 📝 **Nota:** La referencia al proyecto principal ya se agregó en el Paso 1.3 con `dotnet add reference`, así que los imports deberían funcionar directamente.
+> 📝 **Nota:** La referencia al proyecto principal ya se agregó en el Paso 1.4 con `dotnet add reference`, así que los imports deberían funcionar directamente.
 
 ---
 
@@ -810,7 +879,7 @@ Asegúrate de que:
 🤖 **PROMPT en Modo Agent:**
 
 ```
-@workspace Crea pruebas de integración para la API de Contoso Banco en ContosoBanco.Tests/ApiIntegrationTests.cs
+Crea pruebas de integración para la API de Contoso Banco en ContosoBanco.Tests/ApiIntegrationTests.cs
 
 Usando WebApplicationFactory<Program> de Microsoft.AspNetCore.Mvc.Testing:
 
@@ -922,7 +991,6 @@ Incluye:
 
 | Comando | Descripción | Ejemplo |
 |---------|-------------|---------|
-| `@workspace` | Contexto del proyecto entero | `@workspace ¿cómo se implementan los endpoints de clientes?` |
 | `/tests` | Generar pruebas unitarias | Selecciona código → `/tests` |
 | `/doc` | Generar documentación | Selecciona método → `/doc` |
 | `/fix` | Proponer corrección | Selecciona código con error → `/fix` |
@@ -955,8 +1023,9 @@ Incluye:
 | **Comentarios con intención** | `// Validar que el monto sea positivo antes de procesar` |
 | **Contexto del negocio** | Mencionar "Contoso Banco", "cuenta bancaria", "transacción" |
 | **Iterar sobre sugerencias** | Si la primera sugerencia no es perfecta, ajusta tu comentario |
-| **Usar @workspace** | Para que Copilot entienda tu estructura de proyecto |
 | **Referenciar archivos** | "Sigue el patrón de ClienteServicio.cs" para generar código consistente |
+| **Usar la especificación** | "Implementa según docs/spec.md" para dar contexto preciso |
+| **Usar agentes** | Selecciona un agente especializado para tareas de frontend, testing, etc. |
 
 ---
 
@@ -981,6 +1050,10 @@ Al terminar el workshop, deberías tener:
 
 ### Configuración de Copilot
 - [ ] `.github/copilot-instructions.md` — Instrucciones del proyecto
+- [ ] `.github/agents/frontend-web.md` — Agente especializado en frontend web
+
+### Documentación
+- [ ] `docs/spec.md` — Especificación técnica del sistema
 
 ### Estructura de la Solución
 - [ ] `ContosoBanco.sln` — Archivo de solución
@@ -1020,6 +1093,8 @@ Al terminar el workshop, deberías tener:
 
 - [GitHub Copilot Docs](https://docs.github.com/en/copilot)
 - [VS Code + Copilot](https://code.visualstudio.com/docs/copilot/overview)
+- [Custom Agents](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/create-custom-agents)
+- [Prompt Files](https://docs.github.com/en/copilot/tutorials/customization-library/prompt-files)
 - [.NET 8 Documentation](https://learn.microsoft.com/dotnet/)
 - [Minimal APIs Overview](https://learn.microsoft.com/aspnet/core/fundamentals/minimal-apis/overview)
 - [Swashbuckle Documentation](https://learn.microsoft.com/aspnet/core/tutorials/web-api-help-pages-using-swagger)
@@ -1031,11 +1106,14 @@ Al terminar el workshop, deberías tener:
 - [C# Coding Conventions](https://learn.microsoft.com/dotnet/csharp/fundamentals/coding-style/coding-conventions)
 - [Minimal API Best Practices](https://learn.microsoft.com/aspnet/core/fundamentals/minimal-apis/min-api-filter)
 - [Testing ASP.NET Core Apps](https://learn.microsoft.com/aspnet/core/test/integration-tests)
+- [Awesome GitHub Copilot](https://github.com/github/awesome-copilot) — Agentes, instrucciones y skills de la comunidad
 
 ### Siguiente Nivel con Copilot
 
 - **Copilot en la terminal:** Usa `Ctrl+I` en la terminal integrada de VS Code para generar comandos `dotnet`
-- **Agentes personalizados:** Crea archivos `.github/agents/*.md` para especializar a Copilot
+- **Más agentes personalizados:** Crea agentes para testing, seguridad, documentación o DevOps en `.github/agents/`
+- **Prompt files reutilizables:** Define tareas comunes como `/deploy`, `/review`, `/changelog` en `.github/prompts/`
+- **Skills con scripts:** Combina instrucciones con scripts y assets en `.github/skills/` para tareas complejas
 - **Copilot para Git:** Usa Copilot Chat para generar mensajes de commit descriptivos
 
 ---
@@ -1055,7 +1133,7 @@ Al terminar el workshop, deberías tener:
 1. Agregar los paquetes `Microsoft.EntityFrameworkCore` y `Microsoft.EntityFrameworkCore.Sqlite`
 2. Crear un `DbContext` con `DbSet<Cliente>`, `DbSet<Cuenta>`, etc.
 3. Reemplazar los servicios en memoria por repositorios con EF Core
-4. Copilot puede ayudarte: *"@workspace migra los servicios en memoria a Entity Framework Core con SQLite"*
+4. Copilot puede ayudarte: *"Migra los servicios en memoria a Entity Framework Core con SQLite según la especificación en docs/spec.md"*
 
 ### ¿Por qué .NET 8 y no .NET 9?
 
@@ -1078,7 +1156,7 @@ Sí, y eso es **intencional**. Copilot aprende del contexto (tu código, tus com
 
 ### ¿Cómo hago que Copilot genere código en español?
 
-1. Configúralo en `.github/copilot-instructions.md` (Paso 1.2 — aplica para todo el proyecto)
+1. Configúralo en `.github/copilot-instructions.md` (Paso 1.3 — aplica para todo el proyecto)
 2. Escribe comentarios y nombres de variables en español
 3. Si aún genera en inglés, agrega *"Sigue las instrucciones de .github/copilot-instructions.md"* al prompt
 
