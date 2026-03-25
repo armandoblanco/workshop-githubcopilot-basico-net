@@ -832,7 +832,7 @@ dotnet run
 🤖 **PROMPT:**
 
 ```
-/tests Genera pruebas unitarias completas con xUnit para este servicio.
+Genera pruebas unitarias completas con xUnit para este servicio.
 
 Quiero pruebas que cubran:
 
@@ -845,12 +845,6 @@ Quiero pruebas que cubran:
 7. Eliminar un cliente existente
 8. Eliminar un cliente que no existe
 
-Requisitos:
-- Usar xUnit con [Fact] y [Theory] donde aplique
-- Nombres descriptivos en español con el patrón: MetodoAProbar_Escenario_ResultadoEsperado
-- Patrón Arrange-Act-Assert con comentarios
-- Cada test debe ser independiente (instanciar un nuevo servicio en cada test)
-- Usar Assert.Equal, Assert.NotNull, Assert.Null, Assert.Throws según corresponda
 ```
 
 > 🌟 **Momento wow:** Copilot genera un suite completo de tests incluyendo casos positivos y negativos, ¡a partir del código que tú escribiste!
