@@ -1,6 +1,6 @@
 ---
-description: 'Actualiza el README.md del proyecto Contoso Banco reflejando el estado actual del código, endpoints, modelos y estructura de archivos.'
-agent: 'agent'
+name: actualiza-doc
+description: Actualiza el README.md del proyecto Contoso Banco reflejando el estado actual del código, endpoints, modelos y estructura de archivos.
 ---
 
 Analiza el estado actual del proyecto Contoso Banco y actualiza (o crea si no existe) el archivo README.md en la raíz del repositorio.
