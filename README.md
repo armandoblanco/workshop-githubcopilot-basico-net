@@ -1,6 +1,6 @@
 # 🏦 Workshop: GitHub Copilot para Contoso Banco
 
-## Desarrollo Asistido por IA con .NET 8
+## Desarrollo Asistido por IA con .NET 10
 
 ![GitHub Copilot](https://img.shields.io/badge/GitHub%20Copilot-Enabled-green)
 ![.NET](https://img.shields.io/badge/.NET-8.0%20LTS-purple)
@@ -26,7 +26,7 @@
 
 ## 🎯 Introducción
 
-Este workshop práctico de **2 horas** te guiará en el desarrollo de un **Sistema Bancario para Contoso Banco**, una institución financiera ficticia. Utilizarás **GitHub Copilot** como asistente de desarrollo para construir una aplicación completa con C# y .NET 8. Aprenderás a:
+Este workshop práctico de **2 horas** te guiará en el desarrollo de un **Sistema Bancario para Contoso Banco**, una institución financiera ficticia. Utilizarás **GitHub Copilot** como asistente de desarrollo para construir una aplicación completa con C# y .NET 10. Aprenderás a:
 
 - ✅ Usar el autocompletado y sugerencias inline de Copilot
 - ✅ Escribir prompts efectivos que guíen a Copilot con intención
@@ -40,7 +40,7 @@ Este workshop práctico de **2 horas** te guiará en el desarrollo de un **Siste
 | Aspecto | Estándar |
 |---------|----------|
 | Tipo | API REST |
-| Tecnología | .NET 8 (LTS) |
+| Tecnología | .NET 10 (LTS) |
 | Estilo de API | Minimal APIs |
 | Documentación API | Swagger UI (Swashbuckle) |
 | Idioma | Español (código, comentarios, documentación) |
@@ -80,7 +80,7 @@ Este workshop práctico de **2 horas** te guiará en el desarrollo de un **Siste
             │  HTTP (mismo origen)       │
             ▼                           ▼
 ┌─────────────────────────────────────────────────────────────┐
-│              SERVIDOR .NET 8 (Kestrel)                      │
+│              SERVIDOR .NET 10 (Kestrel)                      │
 │              (Program.cs)                                   │
 │                                                             │
 │  ┌──────────────┐   ┌──────────────────────────────────┐    │
@@ -306,7 +306,7 @@ git --version       # Git
 
 - ✅ Configurar instrucciones de Copilot para el proyecto
 - ✅ Documentar la especificación del sistema como base para desarrollo agéntico
-- ✅ Crear la estructura del proyecto .NET 8
+- ✅ Crear la estructura del proyecto .NET 10
 - ✅ Implementar una API REST con Minimal APIs
 - ✅ Obtener documentación Swagger automática con Swashbuckle
 - ✅ Experimentar con el autocompletado de Copilot
@@ -334,7 +334,7 @@ Ayúdame a entender:
 
 2. ¿Qué endpoints REST serían necesarios para un CRUD básico?
 
-3. ¿Cómo organizar esto usando .NET 8 con Minimal APIs?
+3. ¿Cómo organizar esto usando .NET 10 con Minimal APIs?
 
 4. ¿Cómo se integra Swagger automáticamente con Swashbuckle en Minimal APIs?
 ```
@@ -366,7 +366,7 @@ El documento debe incluir:
 2. Entidades del dominio con sus campos y tipos de datos
 3. Lista de endpoints REST (método HTTP, ruta, descripción, códigos de respuesta)
 4. Reglas de negocio (validaciones de saldo, tipos de cuenta, estados)
-5. Stack tecnológico (.NET 8, Minimal APIs, Swashbuckle, xUnit)
+5. Stack tecnológico (.NET 10, Minimal APIs, Swashbuckle, xUnit)
 6. Estructura de carpetas esperada del proyecto
 7. Datos de ejemplo para cada entidad (3 clientes, 3 cuentas)
 
@@ -399,7 +399,7 @@ Crea el archivo .github/copilot-instructions.md con instrucciones para que Copil
 ## Estándares de Código
 | Aspecto | Estándar |
 |---------|----------|
-| Tecnología | .NET 8 (LTS) |
+| Tecnología | .NET 10 (LTS) |
 | Estilo de API | Minimal APIs |
 | Swagger | Swashbuckle |
 | Estilo | Convenciones de C# de Microsoft |
@@ -423,7 +423,7 @@ Este es un sistema bancario para Contoso Banco que gestiona clientes, cuentas y 
 🤖 **PROMPT en Modo Agent:**
 
 ```
-Crea la estructura inicial del proyecto Contoso Banco con .NET 8.
+Crea la estructura inicial del proyecto Contoso Banco con .NET 10.
 
 Necesito:
 - Un proyecto web con Minimal APIs usando "dotnet new web" llamado ContosoBanco
@@ -611,7 +611,7 @@ Basándote en los patrones existentes del proyecto y la especificación en docs/
 
 | Problema | Solución |
 |----------|----------|
-| `dotnet: command not found` | Instala el .NET 8 SDK desde https://dot.net |
+| `dotnet: command not found` | Instala el .NET 10 SDK desde https://dot.net |
 | Error al compilar modelos | Verifica que los namespaces coincidan (`namespace ContosoBanco.Models`) |
 | Swagger no aparece | Verifica que `app.UseSwagger()` y `app.UseSwaggerUI()` estén en Program.cs |
 | Puerto en uso | Cambia con `dotnet run --urls "http://localhost:5001"` |
@@ -1089,7 +1089,7 @@ Al terminar el workshop, deberías tener:
 - [VS Code + Copilot](https://code.visualstudio.com/docs/copilot/overview)
 - [Custom Agents](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/create-custom-agents)
 - [Prompt Files](https://docs.github.com/en/copilot/tutorials/customization-library/prompt-files)
-- [.NET 8 Documentation](https://learn.microsoft.com/dotnet/)
+- [.NET 10 Documentation](https://learn.microsoft.com/dotnet/)
 - [Minimal APIs Overview](https://learn.microsoft.com/aspnet/core/fundamentals/minimal-apis/overview)
 - [Swashbuckle Documentation](https://learn.microsoft.com/aspnet/core/tutorials/web-api-help-pages-using-swagger)
 - [xUnit Documentation](https://xunit.net/docs/getting-started/netcore/cmdline)
@@ -1120,7 +1120,7 @@ Al terminar el workshop, deberías tener:
 |---------|---------|
 | Sin instalación | No requiere SQL Server, SQLite ni ningún motor de BD |
 | Rápido | Operaciones instantáneas, ideal para un workshop |
-| Portable | Funciona igual en cualquier máquina con .NET 8 |
+| Portable | Funciona igual en cualquier máquina con .NET 10 |
 | Simple | Permite enfocarnos en Copilot, no en configuración de BD |
 
 **¿Cómo migrar a Entity Framework Core?**
@@ -1129,9 +1129,9 @@ Al terminar el workshop, deberías tener:
 3. Reemplazar los servicios en memoria por repositorios con EF Core
 4. Copilot puede ayudarte: *"Migra los servicios en memoria a Entity Framework Core con SQLite según la especificación en docs/spec.md"*
 
-### ¿Por qué .NET 8 y no .NET 9?
+### ¿Por qué .NET 10 y no .NET 9?
 
-.NET 8 es la versión **LTS** (Long Term Support) con soporte hasta noviembre de 2026. Además, .NET 9 removió Swashbuckle del template por defecto en favor de `Microsoft.AspNetCore.OpenApi`, lo cual agrega un paso de configuración adicional innecesario para un workshop. Si tu organización ya usa .NET 9, la migración es mínima: solo necesitas agregar Swashbuckle manualmente o usar el nuevo paquete de OpenAPI nativo.
+.NET 10 es la versión **LTS** (Long Term Support) con soporte hasta noviembre de 2026. Además, .NET 9 removió Swashbuckle del template por defecto en favor de `Microsoft.AspNetCore.OpenApi`, lo cual agrega un paso de configuración adicional innecesario para un workshop. Si tu organización ya usa .NET 9, la migración es mínima: solo necesitas agregar Swashbuckle manualmente o usar el nuevo paquete de OpenAPI nativo.
 
 ### ¿Por qué Minimal APIs y no Controllers?
 
@@ -1171,7 +1171,7 @@ La interfaz de GitHub Copilot (modos, íconos, selectores) se actualiza con frec
 
 **Workshop desarrollado para:** Demostración de GitHub Copilot
 
-**Tecnologías:** GitHub Copilot, C# 12, .NET 8, Minimal APIs, Swashbuckle (Swagger), HTML + JavaScript vanilla, Bootstrap 5 (CDN), xUnit
+**Tecnologías:** GitHub Copilot, C# 12, .NET 10, Minimal APIs, Swashbuckle (Swagger), HTML + JavaScript vanilla, Bootstrap 5 (CDN), xUnit
 
 **Duración:** 2 horas
 
