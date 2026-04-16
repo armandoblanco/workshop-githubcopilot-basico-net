@@ -428,7 +428,7 @@ Necesito:
 - Un proyecto web con Minimal APIs usando "dotnet new web" llamado ContosoBanco
 - Carpetas Models/ y Services/ dentro del proyecto
 - Un proyecto de tests con xUnit llamado ContosoBanco.Tests usando "dotnet new xunit"
-- Un archivo de solución (.sln) que agrupe ambos proyectos
+- Un archivo de solución (.slnx) que agrupe ambos proyectos
 - Agrega la referencia del proyecto principal al proyecto de tests
 
 Ejecuta los comandos de dotnet CLI necesarios para crear todo.
@@ -437,13 +437,13 @@ Ejecuta los comandos de dotnet CLI necesarios para crear todo.
 📝 **Alternativa manual** (si el agente no ejecuta):
 ```bash
 # Crear solución y proyectos
-dotnet new sln -n ContosoBanco
+dotnet new slnx -n ContosoBanco
 dotnet new web -n ContosoBanco -o ContosoBanco
 dotnet new xunit -n ContosoBanco.Tests -o ContosoBanco.Tests
 
 # Agregar proyectos a la solución
-dotnet sln add ContosoBanco/ContosoBanco.csproj
-dotnet sln add ContosoBanco.Tests/ContosoBanco.Tests.csproj
+dotnet slnx add ContosoBanco/ContosoBanco.csproj
+dotnet slnx add ContosoBanco.Tests/ContosoBanco.Tests.csproj
 
 # Referencia del proyecto de tests al principal
 dotnet add ContosoBanco.Tests reference ContosoBanco
@@ -1048,7 +1048,7 @@ Al terminar el workshop, deberías tener:
 - [ ] `docs/spec.md` — Especificación técnica del sistema
 
 ### Estructura de la Solución
-- [ ] `ContosoBanco.sln` — Archivo de solución
+- [ ] `ContosoBanco.slnx` — Archivo de solución
 - [ ] `ContosoBanco/ContosoBanco.csproj` — Proyecto web principal
 - [ ] `ContosoBanco.Tests/ContosoBanco.Tests.csproj` — Proyecto de tests
 
