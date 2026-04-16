@@ -5,7 +5,6 @@
 ![GitHub Copilot](https://img.shields.io/badge/GitHub%20Copilot-Enabled-green)
 ![.NET](https://img.shields.io/badge/.NET-8.0%20LTS-purple)
 ![Minimal APIs](https://img.shields.io/badge/Minimal%20APIs-8.x-blue)
-![Swagger](https://img.shields.io/badge/Swagger-Swashbuckle-orange)
 ![Duración](https://img.shields.io/badge/Duración-2%20horas-red)
 
 ---
@@ -42,7 +41,7 @@ Este workshop práctico de **2 horas** te guiará en el desarrollo de un **Siste
 | Tipo | API REST |
 | Tecnología | .NET 10 (LTS) |
 | Estilo de API | Minimal APIs |
-| Documentación API | Swagger UI (Swashbuckle) |
+| Documentación API | Swagger UI |
 | Idioma | Español (código, comentarios, documentación) |
 | Base de datos | En memoria (listas y diccionarios C#) |
 | Frontend | HTML + JavaScript vanilla + Bootstrap 5 (sin frameworks) |
@@ -69,7 +68,7 @@ Este workshop práctico de **2 horas** te guiará en el desarrollo de un **Siste
 │  ┌─────────────────────┐    ┌───────────────────────────┐   │
 │  │   Frontend HTML     │    │      Swagger UI            │   │
 │  │                     │    │   (auto-generado por       │   │
-│  │  Bootstrap 5 (CDN)  │    │    Swashbuckle)            │   │
+│  │  Bootstrap 5 (CDN)  │                    )            │   │
 │  │  JavaScript vanilla │    │                           │   │
 │  │  fetch() → API      │    │   /swagger                │   │
 │  │                     │    │                           │   │
@@ -308,7 +307,7 @@ git --version       # Git
 - ✅ Documentar la especificación del sistema como base para desarrollo agéntico
 - ✅ Crear la estructura del proyecto .NET 10
 - ✅ Implementar una API REST con Minimal APIs
-- ✅ Obtener documentación Swagger automática con Swashbuckle
+- ✅ Obtener documentación Swagger automática 
 - ✅ Experimentar con el autocompletado de Copilot
 
 ### Paso 1.1: Explorar con Modo Ask 🔍
@@ -336,7 +335,7 @@ Ayúdame a entender:
 
 3. ¿Cómo organizar esto usando .NET 10 con Minimal APIs?
 
-4. ¿Cómo se integra Swagger automáticamente con Swashbuckle en Minimal APIs?
+4. ¿Cómo se integra Swagger automáticamente con Minimal APIs?
 ```
 
 📝 **Observa:** Copilot responde con información detallada pero **NO crea ningún archivo**. Esto es ideal para la fase de exploración y planificación.
@@ -366,7 +365,7 @@ El documento debe incluir:
 2. Entidades del dominio con sus campos y tipos de datos
 3. Lista de endpoints REST (método HTTP, ruta, descripción, códigos de respuesta)
 4. Reglas de negocio (validaciones de saldo, tipos de cuenta, estados)
-5. Stack tecnológico (.NET 10, Minimal APIs, Swashbuckle, xUnit)
+5. Stack tecnológico (.NET 10, Minimal APIs, xUnit)
 6. Estructura de carpetas esperada del proyecto
 7. Datos de ejemplo para cada entidad (3 clientes, 3 cuentas)
 
@@ -401,7 +400,7 @@ Crea el archivo .github/copilot-instructions.md con instrucciones para que Copil
 |---------|----------|
 | Tecnología | .NET 10 (LTS) |
 | Estilo de API | Minimal APIs |
-| Swagger | Swashbuckle |
+| Swagger |
 | Estilo | Convenciones de C# de Microsoft |
 | Documentación | Comentarios XML (///) en español |
 
@@ -452,8 +451,7 @@ dotnet add ContosoBanco.Tests reference ContosoBanco
 # Crear carpetas de organización
 mkdir ContosoBanco/Models ContosoBanco/Services
 
-# Agregar Swashbuckle al proyecto principal
-dotnet add ContosoBanco package Swashbuckle.AspNetCore
+
 ```
 
 > 📝 **Nota:** En .NET las carpetas son simplemente organización. Los namespaces se definen en cada archivo `.cs` y el compilador los resuelve automáticamente — no requieren archivos especiales para funcionar como paquetes importables.
@@ -531,7 +529,7 @@ Ahora le pediremos a Copilot que genere la aplicación principal. Observa cómo 
 Actualiza ContosoBanco/Program.cs como la aplicación principal de Contoso Banco.
 
 Configura:
-1. Swashbuckle para Swagger UI con título "API de Contoso Banco" y versión "v1"
+1. Swagger UI con título "API de Contoso Banco" y versión "v1"
 2. Registra ClienteServicio y CuentaServicio como Singleton en el contenedor de DI
 3. Habilita archivos estáticos (UseStaticFiles) para servir el frontend desde wwwroot/
 4. Redirige "/" a "/index.html" con un MapGet simple
